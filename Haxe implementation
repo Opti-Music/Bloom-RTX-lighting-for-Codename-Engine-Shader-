@@ -1,0 +1,27 @@
+
+import openfl.filters.ShaderFilter;
+import flixel.FlxG;
+
+var bloomShader:FlxRuntimeShader;
+
+function create() {
+    // Load shader text (assuming saved in assets/shaders/bloomRTX.frag)
+    bloomShader = new FlxRuntimeShader(Paths.shader("bloomRTX"));
+    
+    // Set your parameters matching the original HLSL code configuration
+    bloomShader.setFloat("brighnessThreshold", 0.4); 
+    bloomShader.setFloat("bloomIntensity", 3.0);
+    bloomShader.setFloat("dirtMaskIntensity", 10.0); // Default from your text
+    
+    // If you want to use a dirt mask texture asset:
+    bloomShader.setBool("useDirtMask", true);
+    bloomShader.setSampler2D("dirtMask", Paths.image("DirtMaskTextureExample"));
+
+    // Apply to the camera
+    FlxG.camera.setFilters([new ShaderFilter(bloomShader)]);
+}
+
+function update(elapsed:Float) {
+    // Example: You can dynamically update the glow intensity dynamically on beat hits!
+    // bloomShader.setFloat("bloomIntensity", Math.max(2.5, bloomShader.getFloat("bloomIntensity") - elapsed * 5));
+}
